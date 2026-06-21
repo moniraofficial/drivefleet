@@ -2,6 +2,8 @@ import Image from "next/image";
 import Banner from "./components/Banner";
 import Features from "./components/Features";
 import AvailableCars from "./components/AvailableCars";
+import Stats from "./components/Stats";
+import HowItWorks from "./components/HowItWorks";
 
 export default function Home() {
   return (
@@ -10,7 +12,9 @@ export default function Home() {
     
       <AvailableCars />
       <Features />
-   <hi> hero section is coming</hi>
+      <Stats />
+      <HowItWorks />
+   
     </div>
   );
 }
