@@ -83,7 +83,12 @@ export default function Navbar() {
                       <p className="font-semibold text-gray-900 truncate">{user.displayName}</p>
                       <p className="text-gray-400 truncate">{user.email}</p>
                     </div>
+                    <Link href="/add-car" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50">Add Car</Link>
+
+                    <Link href="/my-bookings" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50">My Bookings</Link>
+
                     <Link href="/my-added-cars" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50">My Added Cars</Link>
+
                     <button onClick={() => setUser(null)} className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 border-t border-gray-50">Logout</button>
                   </div>
                 )}
