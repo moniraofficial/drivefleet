@@ -5,15 +5,23 @@ import Link from 'next/link';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 
-export default function RegisterPage() {
+
+const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [photoUrl, setPhotoUrl] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log("Registration request:", { name, email, password });
+    
+  
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries());
+
+
+    console.log("Registration request:", user);
     alert("রেজিস্ট্রেশন ডিজাইন রেডি!");
   };
 
@@ -21,7 +29,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 font-sans">
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-100 p-8 shadow-sm space-y-6">
         
- 
+     
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2">
             <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -33,12 +41,14 @@ export default function RegisterPage() {
           <p className="text-xs text-gray-400">Create a new account to explore features</p>
         </div>
 
-     
+
         <form onSubmit={handleRegister} className="space-y-4">
-         
+          
+      
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-gray-800">Full Name</label>
             <input 
+              name="name" // 
               type="text" 
               placeholder="Enter your full name"
               value={name}
@@ -48,10 +58,11 @@ export default function RegisterPage() {
             />
           </div>
 
- 
+         
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-gray-800">Email Address</label>
             <input 
+              name="email" // 
               type="email" 
               placeholder="Enter your email"
               value={email}
@@ -61,11 +72,24 @@ export default function RegisterPage() {
             />
           </div>
 
-    
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-800">Photo URL (optional)</label>
+            <input 
+              name="image" // 
+              type="url" 
+              placeholder="Enter photo URL"
+              value={photoUrl}
+              onChange={(e) => setPhotoUrl(e.target.value)}
+              className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-blue-500 transition-all placeholder-gray-400 shadow-sm"
+            />
+          </div>
+
+     
           <div className="space-y-1.5 relative">
             <label className="text-xs font-semibold text-gray-800">Password</label>
             <div className="relative">
               <input 
+                name="password" // 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Create a strong password"
                 value={password}
@@ -83,7 +107,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
-      
+     
           <button 
             type="submit"
             className="w-full bg-[#111827] hover:bg-black text-white font-semibold text-xs py-3.5 rounded-xl transition-all shadow-sm mt-4"
@@ -92,18 +116,19 @@ export default function RegisterPage() {
           </button>
         </form>
 
-  
+
         <div className="relative flex py-2 items-center">
           <div className="flex-grow border-t border-gray-100"></div>
           <span className="flex-shrink mx-3 text-gray-400 text-[10px] font-bold uppercase tracking-wider">or</span>
           <div className="flex-grow border-t border-gray-100"></div>
         </div>
 
-     
-        <button className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+  
+        <button type="button" className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
           <FcGoogle className="w-4 h-4" /> Sign up with Google
         </button>
 
+  
         <p className="text-center text-xs text-gray-500 font-medium pt-2">
           Already have an account?{' '}
           <Link href="/login" className="text-blue-600 font-bold hover:underline">
@@ -114,4 +139,7 @@ export default function RegisterPage() {
       </div>
     </div>
   );
-}
+};
+
+
+export default RegisterPage;

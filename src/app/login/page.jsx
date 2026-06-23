@@ -5,22 +5,29 @@ import Link from 'next/link';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
 
-export default function LoginPage() {
+
+const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login credentials:", { email, password });
-    alert("লগইন ডিজাইন রেডি! পরবর্তীতে Better Auth ক্লায়েন্ট দিয়ে এটিকে কানেক্ট করব।");
+    
+
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries());
+
+
+    console.log("Login request:", user);
+    alert("লগইন ডিজাইন রেডি!");
   };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 font-sans">
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-100 p-8 shadow-sm space-y-6">
         
-     
+        {/* Header Block Section */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2">
             <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -29,15 +36,17 @@ export default function LoginPage() {
             <span className="font-bold text-xl text-gray-900 tracking-tight">DriveFleet</span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 pt-2">Welcome Back!</h2>
-          <p className="text-xs text-gray-400">Please login to your account</p>
+          <p className="text-xs text-gray-400">Sign in to your account to continue</p>
         </div>
 
 
         <form onSubmit={handleLogin} className="space-y-4">
-         
+          
+          {/* Email Box */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-gray-800">Email</label>
+            <label className="text-xs font-semibold text-gray-800">Email Address</label>
             <input 
+              name="email" // 
               type="email" 
               placeholder="Enter your email"
               value={email}
@@ -47,11 +56,17 @@ export default function LoginPage() {
             />
           </div>
 
-        
+       
           <div className="space-y-1.5 relative">
-            <label className="text-xs font-semibold text-gray-800">Password</label>
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-semibold text-gray-800">Password</label>
+              <Link href="/forgot-password" className="text-[11px] text-blue-600 font-semibold hover:underline">
+                Forgot?
+              </Link>
+            </div>
             <div className="relative">
               <input 
+                name="password" // 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Enter your password"
                 value={password}
@@ -69,33 +84,28 @@ export default function LoginPage() {
             </div>
           </div>
 
-         
-          <div className="flex justify-end">
-            <a href="#" className="text-[11px] text-blue-600 font-semibold hover:underline">Forgot Password?</a>
-          </div>
-
-         
+        
           <button 
             type="submit"
-            className="w-full bg-[#111827] hover:bg-black text-white font-semibold text-xs py-3.5 rounded-xl transition-all shadow-sm mt-2"
+            className="w-full bg-[#111827] hover:bg-black text-white font-semibold text-xs py-3.5 rounded-xl transition-all shadow-sm mt-4"
           >
-            Login
+            Sign In
           </button>
         </form>
 
-       
+     
         <div className="relative flex py-2 items-center">
           <div className="flex-grow border-t border-gray-100"></div>
           <span className="flex-shrink mx-3 text-gray-400 text-[10px] font-bold uppercase tracking-wider">or</span>
           <div className="flex-grow border-t border-gray-100"></div>
         </div>
 
-      
-        <button className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
-          <FcGoogle className="w-4 h-4" /> Continue with Google
+       
+        <button type="button" className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+          <FcGoogle className="w-4 h-4" /> Sign in with Google
         </button>
 
-        
+       
         <p className="text-center text-xs text-gray-500 font-medium pt-2">
           Don't have an account?{' '}
           <Link href="/register" className="text-blue-600 font-bold hover:underline">
@@ -106,4 +116,7 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+
+export default LoginPage;
