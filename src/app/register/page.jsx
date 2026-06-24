@@ -411,6 +411,13 @@ const RegisterPage = () => {
     }
   };
 
+    const handleGoogleLogin = async () => {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+      });
+    };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 font-sans">
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-100 p-8 shadow-sm space-y-6">
@@ -524,7 +531,7 @@ const RegisterPage = () => {
           <div className="flex-grow border-t border-gray-100"></div>
         </div>
 
-        <button type="button" className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+        <button onClick={handleGoogleLogin} type="button" className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
           <FcGoogle className="w-4 h-4" /> Sign up with Google
         </button>
 
