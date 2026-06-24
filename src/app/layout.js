@@ -50,6 +50,8 @@ export default function RootLayout({ children }) {
         
         {/* Render page routes dynamically here */}
         <main className="flex-grow">
+
+           <Toaster position="top-center" reverseOrder={false}/>
            <Navbar />
           {children}
           <Footer />
