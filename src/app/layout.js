@@ -45,10 +45,10 @@ export default function RootLayout({ children }) {
         {/* Toast notifications container for clean error/success alerts */}
         <Toaster position="top-center" reverseOrder={false} />
         
-        {/* Perfectly aligned global Navbar */}
+    
        
         
-        {/* Render page routes dynamically here */}
+   
         <main className="flex-grow">
 
            <Toaster position="top-center" reverseOrder={false}/>
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
         </main>
-         {/* Footer will be added here in the future */}
+       
       </body>
     </html>
   );
