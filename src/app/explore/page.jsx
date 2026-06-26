@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -9,21 +8,21 @@ export default function ExplorePage() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
- 
   const [search, setSearch] = useState('');
   const [maxPrice, setMaxPrice] = useState(200);
   const [categories, setCategories] = useState({
     all: true, SUV: false, Sedan: false, Hatchback: false, Electric: false, Luxury: false
   });
   const [transmission, setTransmission] = useState({ all: true, Automatic: false, Manual: false });
-  const [availability, setAvailability] = useState({ all: true, available: false, unavailable: false });
 
- 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cars')
+
+    fetch('/api/cars')
       .then((res) => res.json())
       .then((data) => {
-        setCars(data);
+        if (Array.isArray(data)) {
+          setCars(data);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -32,7 +31,6 @@ export default function ExplorePage() {
       });
   }, []);
 
- 
   const handleCategoryChange = (type) => {
     if (type === 'all') {
       setCategories({ all: true, SUV: false, Sedan: false, Hatchback: false, Electric: false, Luxury: false });
@@ -54,21 +52,23 @@ export default function ExplorePage() {
     setMaxPrice(200);
     setCategories({ all: true, SUV: false, Sedan: false, Hatchback: false, Electric: false, Luxury: false });
     setTransmission({ all: true, Automatic: false, Manual: false });
-    setAvailability({ all: true, available: false, unavailable: false });
   };
 
- 
   const filteredCars = cars.filter((car) => {
+
+    if (!car || !car.name) return false;
+
     const matchesSearch = car.name.toLowerCase().includes(search.toLowerCase());
     const matchesPrice = car.price <= maxPrice;
     
-    // Category check
+  
     let matchesCategory = true;
     if (!categories.all) {
       const activeCats = Object.keys(categories).filter(k => categories[k]);
-      matchesCategory = activeCats.some(cat => car.name.toLowerCase().includes(cat.toLowerCase()));
+      matchesCategory = activeCats.some(cat => 
+        car.category && car.category.toLowerCase() === cat.toLowerCase()
+      );
     }
-
 
     let matchesTrans = true;
     if (!transmission.all) {
@@ -82,7 +82,7 @@ export default function ExplorePage() {
     <div className="bg-[#F8FAFC] min-h-screen py-6 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
-   
+        {/* Breadcrumb & Search Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-2">
           <div>
             <nav className="text-[11px] text-gray-400 font-medium mb-1">
@@ -92,7 +92,6 @@ export default function ExplorePage() {
             <p className="text-xs text-gray-400 mt-0.5">Find the perfect car for your next adventure</p>
           </div>
 
-       
           <div className="flex items-center gap-2 max-w-md w-full md:w-auto">
             <div className="relative w-full md:w-72">
               <input 
@@ -110,19 +109,18 @@ export default function ExplorePage() {
           </div>
         </div>
 
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2">
           
-     
+          {/* Sidebar Filter Panel */}
           <aside className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 p-6 space-y-6 shadow-sm">
             
-       
+            {/* Price Range */}
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Price Range</h3>
               <input 
                 type="range" 
                 min="0" 
-                max="200" 
+                max="500" 
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full accent-blue-600 h-1 bg-gray-100 rounded-lg cursor-pointer" 
@@ -133,7 +131,7 @@ export default function ExplorePage() {
               </div>
             </div>
 
-
+            {/* Car Category */}
             <div className="space-y-2.5 border-t border-gray-50 pt-5">
               <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Car Category</h3>
               {Object.keys(categories).map((cat) => (
@@ -144,12 +142,12 @@ export default function ExplorePage() {
                     onChange={() => handleCategoryChange(cat)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded accent-blue-600" 
                   />
-                  <span>{cat === 'all' ? 'All Category' : cat}</span>
+                  <span className="capitalize">{cat === 'all' ? 'All Category' : cat}</span>
                 </label>
               ))}
             </div>
 
-  
+            {/* Transmission */}
             <div className="space-y-2.5 border-t border-gray-50 pt-5">
               <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Transmission</h3>
               {Object.keys(transmission).map((trans) => (
@@ -165,22 +163,6 @@ export default function ExplorePage() {
               ))}
             </div>
 
-  
-            <div className="space-y-2.5 border-t border-gray-50 pt-5">
-              <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Availability</h3>
-              {['All', 'Available Now', 'Not Available'].map((status, index) => (
-                <label key={status} className="flex items-center gap-3 text-xs font-medium text-gray-500 cursor-pointer select-none">
-                  <input 
-                    type="checkbox" 
-                    defaultChecked={index === 0}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded accent-blue-600" 
-                  />
-                  <span>{status}</span>
-                </label>
-              ))}
-            </div>
-
-   
             <button 
               onClick={handleReset}
               className="w-full bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-800 flex items-center justify-center gap-2 text-xs font-bold py-3 rounded-xl transition-all border border-gray-100"
@@ -189,10 +171,9 @@ export default function ExplorePage() {
             </button>
           </aside>
 
-
+          {/* Main Content Area */}
           <main className="lg:col-span-9 space-y-6">
             
- 
             <div className="flex justify-between items-center text-xs text-gray-500 font-semibold px-1">
               <p>Showing {filteredCars.length} cars</p>
               <div className="flex items-center gap-2">
@@ -204,7 +185,6 @@ export default function ExplorePage() {
               </div>
             </div>
 
-   
             {loading ? (
               <div className="bg-white rounded-2xl border border-gray-100 p-24 text-center text-xs font-semibold text-blue-600 tracking-wider shadow-sm">
                 MongoDB ডাটাবেস থেকে ডেটা লোড হচ্ছে...
@@ -224,6 +204,15 @@ export default function ExplorePage() {
                       <FaRegHeart className="w-3.5 h-3.5" />
                     </button>
 
+                    {/* Availability Status Badge */}
+                    <span className={`absolute top-4 left-4 z-10 text-[9px] font-extrabold px-2 py-0.5 rounded-md shadow-sm ${
+                      car.availability === "Available" 
+                        ? "bg-green-50 text-green-700 border border-green-100" 
+                        : "bg-amber-50 text-amber-700 border border-amber-100"
+                    }`}>
+                      {car.availability || "Available"}
+                    </span>
+
                     <div className="h-36 w-full flex items-center justify-center my-4 p-2">
                       <img src={car.image} alt={car.name} className="max-h-full max-w-full object-contain select-none transition-transform duration-300 group-hover:scale-102" />
                     </div>
@@ -241,11 +230,11 @@ export default function ExplorePage() {
                     <div className="grid grid-cols-3 gap-1 pt-3.5 my-3 border-t border-gray-50 text-[10px] text-gray-400 font-semibold px-1">
                       <div className="flex items-center gap-1.5"><FaGear className="w-3.5 h-3.5 text-gray-300 shrink-0" /><span className="truncate">{car.transmission}</span></div>
                       <div className="flex items-center gap-1.5 justify-center"><FaUsers className="w-3.5 h-3.5 text-gray-300 shrink-0" /><span>{car.seats} Seats</span></div>
-                      <div className="flex items-center gap-1.5 justify-end"><FaGasPump className="w-3.5 h-3.5 text-gray-300 shrink-0" /><span className="truncate">{car.fuel}</span></div>
+                      <div className="flex items-center gap-1.5 justify-end"><FaGasPump className="w-3.5 h-3.5 text-gray-300 shrink-0" /><span className="truncate">{car.fuel || car.fuelType}</span></div>
                     </div>
 
-               
-                    <Link href={`/cars/${car.id}`} className="w-full mt-1">
+                
+                    <Link href={`/cars/${car._id || car.id}`} className="w-full mt-1">
                       <button className="w-full bg-white border border-gray-200 hover:border-gray-950 hover:bg-gray-950 hover:text-white text-gray-800 font-bold text-xs py-2.5 rounded-xl transition-all">
                         View Details
                       </button>
@@ -254,18 +243,6 @@ export default function ExplorePage() {
                 ))}
               </div>
             )}
-
-         
-            <div className="flex justify-center items-center gap-2 pt-6">
-              <button className="w-9 h-9 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-all shadow-sm"><FaChevronLeft className="w-3 h-3" /></button>
-              <button className="w-9 h-9 rounded-xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-md">1</button>
-              <button className="w-9 h-9 rounded-xl bg-white border border-gray-100 text-gray-500 font-bold text-xs flex items-center justify-center hover:bg-gray-50 transition-all shadow-sm">2</button>
-              <button className="w-9 h-9 rounded-xl bg-white border border-gray-100 text-gray-500 font-bold text-xs flex items-center justify-center hover:bg-gray-50 transition-all shadow-sm">3</button>
-              <span className="text-gray-300 text-xs px-1">—</span>
-              <button className="w-9 h-9 rounded-xl bg-white border border-gray-100 text-gray-500 font-bold text-xs flex items-center justify-center hover:bg-gray-50 transition-all shadow-sm">5</button>
-              <button className="w-9 h-9 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-all shadow-sm"><FaChevronRight className="w-3 h-3" /></button>
-            </div>
-
           </main>
         </div>
 
