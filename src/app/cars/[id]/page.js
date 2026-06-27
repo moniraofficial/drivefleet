@@ -168,7 +168,7 @@ export default function CarDetailsPage() {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://localhost:5000/api/cars/${id}`)
+      fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars/${id}`)
         .then((res) => {
           if (!res.ok) throw new Error("Car not found");
           return res.json();
@@ -200,7 +200,7 @@ export default function CarDetailsPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/bookings", {
+      const res = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

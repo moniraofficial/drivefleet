@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 
 export async function GET() {
   try {
-    const backendResponse = await fetch("http://localhost:5000/api/cars", {
+    const backendResponse = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars`, {
       cache: "no-store",
     });
     const data = await backendResponse.json();
@@ -31,7 +31,7 @@ export async function POST(req) {
 
     const body = await req.json();
 
-    const backendResponse = await fetch("http://localhost:5000/api/cars", {
+    const backendResponse = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

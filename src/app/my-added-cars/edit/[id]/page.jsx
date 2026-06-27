@@ -33,7 +33,7 @@ export default function EditCarPage() {
 
     if (id) {
     
-      fetch(`http://localhost:5000/api/cars/${id}`)
+      fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars/${id}`)
         .then((res) => {
           if (!res.ok) throw new Error("Car not found");
           return res.json();
@@ -70,7 +70,7 @@ export default function EditCarPage() {
 
     try {
     
-      const res = await fetch(`/api/cars/${id}`, {
+      const res = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

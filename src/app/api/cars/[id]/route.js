@@ -88,7 +88,7 @@ export async function DELETE(req, { params }) {
     }
 
     // এক্সপ্রেস ব্যাকএন্ডে রিকোয়েস্ট ফরওয়ার্ড করা হচ্ছে
-    const backendResponse = await fetch(`http://localhost:5000/api/cars/${id}`, {
+    const backendResponse = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars/${id}`, {
       method: "DELETE",
     });
 
@@ -121,7 +121,7 @@ export async function PUT(req, { params }) {
     }
 
 
-    const backendResponse = await fetch(`http://localhost:5000/api/cars/${id}`, {
+    const backendResponse = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/cars/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

@@ -12,7 +12,7 @@ export default function AvailableCars() {
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cars')
+    fetch(`https://drivefleet-server-six.vercel.app/api/cars`)
       .then((res) => res.json())
       .then((data) => {
         setCars(data);
@@ -23,7 +23,7 @@ export default function AvailableCars() {
         setLoading(false);
       });
   }, []);
-
+  console.log(cars);
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       
