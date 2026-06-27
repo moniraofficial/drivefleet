@@ -24,6 +24,7 @@ export default function AddCarPage() {
   });
 
   const [loading, setLoading] = useState(false);
+  
 
 
   useEffect(() => {
